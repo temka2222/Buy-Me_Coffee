@@ -1,7 +1,7 @@
-import { RequestHandler } from "express";
 import { prisma } from "../../db";
-export const CreateProfile: RequestHandler = async (req, res) => {
-  const userId = parseInt(req.params.userId);
+
+export const updateProfile = async (req, res) => {
+  const profileId = parseInt(req.params.profileId);
   const {
     name,
     about,
@@ -10,25 +10,23 @@ export const CreateProfile: RequestHandler = async (req, res) => {
     successMessage,
     backgroundImage,
   } = req.body;
-  console.log("userId", userId);
 
   try {
-    const profile = await prisma.profile.create({
+    await prisma.profile.update({
+      where: { id: profileId },
       data: {
         name,
         about,
         avatarImage,
         socialMediaURL,
-        userId,
         successMessage,
         backgroundImage,
-        createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
 
-    res.status(200).json(profile);
+    return res.status(200).json({ message: "amjilttai" });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    return res.status(500).json({ message: "server error", error });
   }
 };

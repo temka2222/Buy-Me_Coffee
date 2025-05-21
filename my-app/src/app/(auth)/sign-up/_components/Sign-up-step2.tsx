@@ -1,3 +1,4 @@
+import { useUser } from "@/app/(user)/Home/_components/userValues";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -32,20 +33,10 @@ type FormData = z.infer<typeof schema>;
 type SignUpStepTwoProps = {
   setStep: (value: number) => void;
   username: string;
-  password: string;
-  email: string;
-  setPassword: (value: string) => void;
-  setEmail: (value: string) => void;
 };
 
-export const SignUpStepTwo = ({
-  setStep,
-  setEmail,
-  email,
-  password,
-  setPassword,
-  username,
-}: SignUpStepTwoProps) => {
+export const SignUpStepTwo = ({ setStep, username }: SignUpStepTwoProps) => {
+  const { signUp, user } = useUser();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -56,9 +47,8 @@ export const SignUpStepTwo = ({
   });
   const { handleSubmit, control, formState } = form;
   const onSubmit = (data: FormData) => {
-    setEmail(data.email);
-    setPassword(data.password);
     setStep(3);
+    signUp(data.email, data.password, username);
   };
 
   return (

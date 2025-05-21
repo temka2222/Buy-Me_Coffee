@@ -8,4 +8,5 @@ import { signIn } from "../controllers/Authentication/sign-in";
 export const authRouter = Router()
   .get("/me", authenticationMiddleware, getMe)
   .post("/signin", signIn)
-  .post("/signup", checkUsername, signUp);
+  .post("/checkname", checkUsername)
+  .post("/signup", signUp);

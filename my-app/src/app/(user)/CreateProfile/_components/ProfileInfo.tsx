@@ -13,18 +13,17 @@ import { Camera } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useUser } from "../../Home/_components/userValues";
+import { api } from "@/app/axios";
+import axios from "axios";
+import { toast } from "sonner";
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
   "image/png",
   "image/webp",
 ];
-type UserProfileValuesType = {
-  img?: any;
-  name: string;
-  about: string;
-  url: string;
-};
+
 export type StepPropsType = {
   setStep: (value: number) => void;
 };
@@ -41,10 +40,36 @@ const schema = z.object({
 });
 
 type FormData = z.infer<typeof schema>;
+
 export const ProfileInfo = ({ setStep }: StepPropsType) => {
+  const { user } = useUser();
+  const [loading, setLoading] = useState(false);
+  const createProfile = async (
+    name: string,
+    about: string,
+    avatarImage: string,
+    socialMediaURL: string
+  ) => {
+    try {
+      setLoading(true);
+      const { data } = await api.post(`/profile/1`, {
+        name,
+        about,
+        avatarImage,
+        socialMediaURL,
+        successMessage: "",
+        backgroundImage: "",
+      });
+    } catch (error) {
+      {
+        toast.error("Сервертэй холбогдож чадсангүй");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const [prevProfileImage, setPrevProfileImage] = useState("");
-  const [userProfileValues, setUseruserProfileValues] =
-    useState<UserProfileValuesType>();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -58,7 +83,7 @@ export const ProfileInfo = ({ setStep }: StepPropsType) => {
   const { handleSubmit, control, formState } = form;
   const onSubmit = (data: FormData) => {
     setStep(2);
-    setUseruserProfileValues(data);
+    createProfile(data.name, data.about, prevProfileImage, data.url);
   };
   return (
     <div className="flex w-[25%] flex-col gap-6 ">

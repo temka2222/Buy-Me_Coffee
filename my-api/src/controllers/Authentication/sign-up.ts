@@ -5,14 +5,9 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../../db";
 
 export const signUp: RequestHandler = async (req, res) => {
-  const { password, email } = req.body;
-  const isExist = req.isExist;
-  const username = req.username;
+  const { password, email, username } = req.body;
+
   try {
-    if (isExist) {
-      res.status(400).json({ message: "Username already taken" });
-      return;
-    }
     const existingEmail = await prisma.user.findFirst({
       where: { email },
     });
@@ -34,6 +29,7 @@ export const signUp: RequestHandler = async (req, res) => {
       { userId: newUser.id, email: newUser.email },
       process.env.JWT_SECRET
     );
+
     res.status(200).json({ user: userWithoutPassword, token });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });

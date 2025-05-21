@@ -19,10 +19,7 @@ export const checkUsername: RequestHandler = async (req, res, next) => {
       res.status(200).json({ isExist: true });
       return;
     }
-
-    req.isExist = false;
-    req.username = username;
-    next();
+    res.status(200).json(username);
   } catch (error) {
     res.status(500).json({ message: "server error", error });
   }
