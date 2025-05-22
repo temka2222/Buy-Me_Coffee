@@ -47,6 +47,7 @@ export type UserContextType = {
   signOut: () => Promise<void>;
   step: number;
   setStep: (value: number) => void;
+  setLoading: (value: boolean) => void;
   // UpdateProfile: (userId: number) => Promise<void>;
   loading: boolean;
 } & PropsWithChildren;
@@ -99,7 +100,6 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         username,
       });
       localStorage.setItem("token", data.token);
-      console.log(data);
       setUser(data.user);
 
       router.push("./CreateProfile");
@@ -127,12 +127,10 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   };
 
   const getUser = async () => {
-    // const token = localStorage.getItem("token");
     setLoading(true);
     try {
-      const { data } = await axios.get("http://localhost:3001/auth/me");
+      const { data } = await api.get("/auth/me");
       setUser(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
 
@@ -160,6 +158,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         loading,
         step,
         setStep,
+        setLoading,
       }}
     >
       {loading ? (

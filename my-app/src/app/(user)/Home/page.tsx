@@ -3,8 +3,11 @@ import { useState } from "react";
 import { Menu } from "./_components/Menu";
 import { User } from "./_components/User";
 import { ProfileDashboard } from "./_components/ProfileDashboard";
+import { useUser } from "./_components/userValues";
 export default function Home() {
   const [selectedMenu, setSelectedmenu] = useState("home");
+  const { user } = useUser();
+  console.log(user);
   return (
     <div className="flex flex-row px-16 pt-16 gap-4">
       <Menu selectedMenu={selectedMenu} setSelectedmenu={setSelectedmenu} />

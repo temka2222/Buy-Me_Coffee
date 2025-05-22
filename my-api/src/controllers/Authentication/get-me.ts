@@ -6,16 +6,7 @@ export const getMe: RequestHandler = async (req, res) => {
     const userId = req.userId;
     const user = await prisma.user.findFirst({
       where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        username: true,
-        createdAt: true,
-        updatedAt: true,
-        profile: true,
-        bankCard: true,
-        donations: true,
-      },
+
       include: {
         profile: true,
         bankCard: true,
@@ -29,6 +20,7 @@ export const getMe: RequestHandler = async (req, res) => {
 
     res.status(200).json(user);
   } catch (error) {
+    console.error("getMe error:", error);
     res.status(500).json({ message: "Server error", error });
   }
 };

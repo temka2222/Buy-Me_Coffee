@@ -26,44 +26,53 @@ export const useSelectCountry = () => {
     };
 
     SelectCountry();
-    
   }, []);
 
-  return { countries, loading, error };
+  return { countries, loading };
 };
-export const  months = [
+export const months = [
   "January",
   "February",
   "March",
   "April",
   "May",
   "June",
-  "July", 
+  "July",
   "August",
   "September",
   "October",
   "November",
-  "December"
+  "December",
 ];
 export const years = [
-  2025, 2026, 2027, 2028, 2029,
-  2030, 2031, 2032, 2033, 2034, 2035
+  2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035,
 ];
-export const formatCardNumber = (cardNumber: string) => {
-  const digitCardNumber:string[]=[];
 
-  for (let i=0;i<cardNumber.length;i++){
-    if(cardNumber[i]!="-"){
-      digitCardNumber.push(cardNumber[i])
+export const formatCardNumber = (cardNumber: string) => {
+  const digitCardNumber: string[] = [];
+
+  for (let i = 0; i < cardNumber.length; i++) {
+    if (cardNumber[i] != "-") {
+      digitCardNumber.push(cardNumber[i]);
     }
-   
   }
- 
 
   const formattedNumber: string[] = [];
   for (let i = 0; i < digitCardNumber.length; i += 4) {
     formattedNumber.push(digitCardNumber.slice(i, i + 4).join(""));
   }
 
-  return formattedNumber.join("-"); // join the array with hyphens
+  return formattedNumber.join("-");
+};
+
+export const cardNumberValue = (cardNumber: string) => {
+  const digitCardNumber: string[] = [];
+
+  for (let i = 0; i < cardNumber.length; i++) {
+    if (cardNumber[i] != "-") {
+      digitCardNumber.push(cardNumber[i]);
+    }
+  }
+
+  return digitCardNumber.join("");
 };

@@ -35,7 +35,6 @@ export const SignUpStepOne = ({ setStep, setUsername }: SignUpStepOneProps) => {
     const res = await api.post("/auth/checkname", {
       username,
     });
-    console.log(res.data.isExist);
     if (res.data.isExist == true) {
       setErrorMessage("The username is already taken");
     } else {

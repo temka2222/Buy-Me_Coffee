@@ -5,7 +5,7 @@ declare global {
   namespace Express {
     interface Request {
       userId?: number;
-      username?: string;
+      email?: string;
     }
   }
 }
@@ -18,9 +18,9 @@ export const authenticationMiddleware: RequestHandler = (req, res, next) => {
   }
 
   try {
-    const { userId, username } = jwt.verify(Token, process.env.JWT_SECRET) as {
+    const { userId, email } = jwt.verify(Token, process.env.JWT_SECRET) as {
       userId: number;
-      username: boolean;
+      email: string;
     };
 
     req.userId = userId;

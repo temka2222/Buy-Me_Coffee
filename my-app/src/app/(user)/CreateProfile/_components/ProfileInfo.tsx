@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Camera } from "lucide-react";
+import { Camera, Loader } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -52,7 +52,7 @@ export const ProfileInfo = ({ setStep }: StepPropsType) => {
   ) => {
     try {
       setLoading(true);
-      const { data } = await api.post(`/profile/1`, {
+      const { data } = await api.post(`/profile/${user?.id}`, {
         name,
         about,
         avatarImage,
@@ -60,9 +60,10 @@ export const ProfileInfo = ({ setStep }: StepPropsType) => {
         successMessage: "",
         backgroundImage: "",
       });
+      toast.success("success!");
     } catch (error) {
       {
-        toast.error("Сервертэй холбогдож чадсангүй");
+        toast.error("error!");
       }
     } finally {
       setLoading(false);
@@ -81,9 +82,9 @@ export const ProfileInfo = ({ setStep }: StepPropsType) => {
     },
   });
   const { handleSubmit, control, formState } = form;
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
+    await createProfile(data.name, data.about, prevProfileImage, data.url);
     setStep(2);
-    createProfile(data.name, data.about, prevProfileImage, data.url);
   };
   return (
     <div className="flex w-[25%] flex-col gap-6 ">
@@ -191,7 +192,7 @@ export const ProfileInfo = ({ setStep }: StepPropsType) => {
                     : "bg-black"
                 } `}
             >
-              Continue
+              {loading ? <Loader className="animate-spin" /> : "Continue"}
             </Button>
           </div>
         </form>

@@ -14,30 +14,37 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { StepPropsType } from "./ProfileInfo";
-import { formatCardNumber, months, useSelectCountry, years } from "./SelectData";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  cardNumberValue,
+  formatCardNumber,
+  months,
+  useSelectCountry,
+  years,
+} from "./SelectData";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AddBankCardFunction } from "./AddBankCardFunction";
+import { useUser } from "../../Home/_components/userValues";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-type UserBankCardInfoType = {
-  country: string;
-  firstName: string;
-  lastName: string;
-  cardNumber: string;
-  expiryMonth: string;
-  expiryYear: string;
-  cvc: string;
-};
 const schema = z.object({
   country: z.string().min(1, { message: "Select country to continue" }),
   firstName: z.string().min(1, { message: "First name must match" }),
   lastName: z.string().min(1, { message: "First name must match" }),
 
   cardNumber: z
-  .string()
-  .min(16, { message: "Card number must be at least 16 digits" })
-  .max(19, { message: "Card number must be at most 19 digits" })
-  .refine((val) => /^\d{16,19}$/.test(val.replace(/-/g, "")), {
-    message: "Card number must contain only digits",
-  }),
+    .string()
+    .min(16, { message: "Card number must be at least 16 digits" })
+    .max(19, { message: "Card number must be at most 19 digits" })
+    .refine((val) => /^\d{16,19}$/.test(val.replace(/-/g, "")), {
+      message: "Card number must contain only digits",
+    }),
 
   expiryMonth: z.string().min(1, { message: "First name must match" }),
   expiryYear: z.string().min(1, { message: "First name must match" }),
@@ -46,10 +53,9 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 export const AddPaymentCardInfo = ({ setStep }: StepPropsType) => {
-  const [userBankCardInfo, setUserBankCardInfo] =
-    useState<UserBankCardInfoType>();
+  const router = useRouter();
   const { countries } = useSelectCountry();
-
+  const { loading, setLoading, user } = useUser();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -64,10 +70,34 @@ export const AddPaymentCardInfo = ({ setStep }: StepPropsType) => {
     },
   });
   const { handleSubmit, control, formState } = form;
-  const onSubmit = (data: FormData) => {
-   setUserBankCardInfo(data)
-
+  const onSubmit = async (data: FormData) => {
+    const cardValue = cardNumberValue(data.cardNumber);
+    const lastDay = new Date(
+      parseInt(data.expiryYear),
+      parseInt(data.expiryMonth),
+      0
+    ).getDate();
+    const expiryDate = new Date(
+      parseInt(data.expiryYear),
+      parseInt(data.expiryMonth) - 1,
+      lastDay
+    );
+    if (!user) {
+      toast.error("User not found!");
+      return;
+    } else
+      await AddBankCardFunction(
+        data.country,
+        data.firstName,
+        data.lastName,
+        cardValue,
+        expiryDate,
+        user.id,
+        setLoading
+      );
+    router.push("./Home");
   };
+
   return (
     <Form {...form}>
       <form
@@ -82,25 +112,26 @@ export const AddPaymentCardInfo = ({ setStep }: StepPropsType) => {
             Enter location and payment details
           </span>
         </FormDescription>
-        <FormField 
+        <FormField
           control={form.control}
           name="country"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>Select country</FormLabel>
-              <Select  onValueChange={field.onChange} defaultValue={field.value} >
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl className="w-full">
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {countries.map((item,countrryIndex)=>{
-                    return <SelectItem key={countrryIndex}  value={item.country}>{item.country}</SelectItem>
-
+                  {countries.map((item, countrryIndex) => {
+                    return (
+                      <SelectItem key={countrryIndex} value={item.country}>
+                        {item.country}
+                      </SelectItem>
+                    );
                   })}
-                  
-                  
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -153,71 +184,84 @@ export const AddPaymentCardInfo = ({ setStep }: StepPropsType) => {
             <FormItem>
               <FormLabel>Enter card number</FormLabel>
               <FormControl>
-              <Input
-  placeholder="XXXX-XXXX-XXXX-XXXX"
-  {...field}
-  value={field.value}
-  onChange={(e) => {
-    const formatted = formatCardNumber(e.target.value);
-    field.onChange(formatted);
-  }}
-/>
+                <Input
+                  placeholder="XXXX-XXXX-XXXX-XXXX"
+                  {...field}
+                  value={field.value}
+                  onChange={(e) => {
+                    const formatted = formatCardNumber(e.target.value);
+                    field.onChange(formatted);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex flex-row gap-6 justify-between">
-        <FormField
-          control={form.control}
-          name="expiryMonth"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Expires</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Month" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {months.map((month,monthIndex)=>{
-                    return <SelectItem key={monthIndex} value={month}>{month}</SelectItem>
+          <FormField
+            control={form.control}
+            name="expiryMonth"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Expires</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Month" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {months.map((month, monthIndex) => {
+                      return (
+                        <SelectItem
+                          key={monthIndex}
+                          value={String(monthIndex + 1)}
+                        >
+                          {month}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
 
-                  })}
-                  
-                 
-                </SelectContent>
-              </Select>
-              
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-         <FormField
-          control={form.control}
-          name="expiryYear"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Year</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Year" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {years.map((year,yearIndex)=>{
-                    return <SelectItem key={yearIndex} value={String(year)}>{year}</SelectItem>
-                  })}
-                  
-                </SelectContent>
-              </Select>
-            
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="expiryYear"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Year</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Year" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {years.map((year, yearIndex) => {
+                      return (
+                        <SelectItem key={yearIndex} value={String(year)}>
+                          {year}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="cvc"
