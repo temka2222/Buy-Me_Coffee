@@ -7,10 +7,9 @@ export const CreateProfile: RequestHandler = async (req, res) => {
     about,
     avatarImage,
     socialMediaURL,
-    successMessage,
     backgroundImage,
+    successMessage,
   } = req.body;
-  console.log("userId", userId);
 
   try {
     const profile = await prisma.profile.create({
@@ -20,8 +19,8 @@ export const CreateProfile: RequestHandler = async (req, res) => {
         avatarImage,
         socialMediaURL,
         userId,
-        successMessage,
         backgroundImage,
+        successMessage,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

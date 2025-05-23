@@ -1,20 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, User2 } from "lucide-react";
+import { Heart, User2, UserIcon } from "lucide-react";
+import { useUser } from "../../Home/_components/userValues";
+import Image from "next/image";
 
 export const Profile = () => {
+  const { user } = useUser();
   return (
     <div className=" flex-1  flex flex-col gap-4">
       <Card>
         <CardContent className="w-full flex flex-col gap-3">
           <div className="w-full flex flex-row justify-between items-center border-b border-solid py-8 ">
-            <div className="flex flex-row gap-2">
-              <User2 />
-              <p className="font-bold">Jake</p>
+            <div className="flex flex-row gap-2 justify-center items-center">
+              {user ? (
+                <Image
+                  width={28}
+                  height={28}
+                  alt=" image"
+                  src={user.profile.avatarImage}
+                  className="rounded-full"
+                ></Image>
+              ) : (
+                <UserIcon />
+              )}
+              <p className="font-bold">{user?.profile.name}</p>
             </div>
             <Button variant="outline">Edit page</Button>
           </div>
-          <p className="font-bold">About Jake</p>
+          <p className="font-bold">About {user?.profile.name}</p>
           <p>
             I’m a typical person who enjoys exploring different things. I also
             make music art as a hobby. Follow me along.

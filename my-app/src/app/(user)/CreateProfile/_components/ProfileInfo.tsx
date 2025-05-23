@@ -17,6 +17,7 @@ import { useUser } from "../../Home/_components/userValues";
 import { api } from "@/app/axios";
 import axios from "axios";
 import { toast } from "sonner";
+import { uploadImage } from "./uploadImageFunction";
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -42,34 +43,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export const ProfileInfo = ({ setStep }: StepPropsType) => {
-  const { user } = useUser();
+  const { user, createProfile } = useUser();
   const [loading, setLoading] = useState(false);
-  const createProfile = async (
-    name: string,
-    about: string,
-    avatarImage: string,
-    socialMediaURL: string
-  ) => {
-    try {
-      setLoading(true);
-      const { data } = await api.post(`/profile/${user?.id}`, {
-        name,
-        about,
-        avatarImage,
-        socialMediaURL,
-        successMessage: "",
-        backgroundImage: "",
-      });
-      toast.success("success!");
-    } catch (error) {
-      {
-        toast.error("error!");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  const [uploadImageFile, setUploadImageFile] = useState<File>();
   const [prevProfileImage, setPrevProfileImage] = useState("");
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -83,7 +59,12 @@ export const ProfileInfo = ({ setStep }: StepPropsType) => {
   });
   const { handleSubmit, control, formState } = form;
   const onSubmit = async (data: FormData) => {
-    await createProfile(data.name, data.about, prevProfileImage, data.url);
+    setLoading(true);
+    if (!user) return;
+    const imageUrl = await uploadImage(uploadImageFile);
+    setPrevProfileImage(imageUrl);
+    await createProfile(data.name, data.about, imageUrl, data.url, user?.id);
+    setLoading(false);
     setStep(2);
   };
   return (
@@ -123,6 +104,7 @@ export const ProfileInfo = ({ setStep }: StepPropsType) => {
                         className="hidden"
                         onChange={(event) => {
                           const file = event.target.files?.[0];
+                          setUploadImageFile(file);
                           field.onChange(event.target.files);
                           if (file) {
                             setPrevProfileImage(URL.createObjectURL(file));

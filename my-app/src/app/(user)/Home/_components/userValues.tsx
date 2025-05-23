@@ -48,6 +48,13 @@ export type UserContextType = {
   step: number;
   setStep: (value: number) => void;
   setLoading: (value: boolean) => void;
+  createProfile: (
+    name: string,
+    about: string,
+    avatarImage: string,
+    socialMediaURL: string,
+    userId: number
+  ) => Promise<void>;
   // UpdateProfile: (userId: number) => Promise<void>;
   loading: boolean;
 } & PropsWithChildren;
@@ -79,17 +86,28 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
       setLoading(false);
     }
   };
-  //   const UpdateUserAddress = async (address: string) => {
-  //     const token = localStorage.getItem("token");
-  //     if (!token) return;
-  //     try {
-  //       await api.put("/auth/update", { userAddress: address });
-  //       getUser();
-  //       toast.success("Хаяг амжилттай шинэчлэгдлээ");
-  //     } catch {
-  //       toast.error("Амжилтгүй");
-  //     }
-  //   };
+  const createProfile = async (
+    name: string,
+    about: string,
+    avatarImage: string,
+    socialMediaURL: string,
+    userId: number
+  ) => {
+    try {
+      await api.post(`/profile/${userId}`, {
+        name,
+        about,
+        avatarImage,
+        socialMediaURL,
+        backgroundImage: "",
+        successMessage: "",
+      });
+
+      toast.success("success!");
+    } catch (error) {
+      toast.error("error!");
+    }
+  };
 
   const signUp = async (email: string, password: string, username: string) => {
     try {
@@ -159,6 +177,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         step,
         setStep,
         setLoading,
+        createProfile,
       }}
     >
       {loading ? (

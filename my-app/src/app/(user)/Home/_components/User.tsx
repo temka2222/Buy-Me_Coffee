@@ -9,16 +9,25 @@ import {
 } from "@/components/ui/select";
 
 import { Copy, User2 } from "lucide-react";
+import { useUser } from "./userValues";
+import Image from "next/image";
 
 export const User = () => {
+  const { user } = useUser();
   return (
     <div className="w-full flex flex-col gap-4 border border-solid p-6 rounded-xl">
       <div className="w-full  flex flex-row justify-between border-b border-solid py-16 ">
         <div className="flex flex-row gap-2 justify-center items-center ">
-          <User2 />
-          <div className=" flex flex-col gap-2">
-            <p className="font-medium">name</p>
-            <p>buymeacoffee.com/baconpancakes1</p>
+          <Image
+            width={36}
+            height={36}
+            alt="image"
+            className="rounded-full"
+            src={user ? user?.profile.avatarImage : ""}
+          />
+          <div className=" flex flex-col ">
+            <p className="font-bold">{user?.profile.name}</p>
+            <p>buymeacoffee.com/{user?.username}</p>
           </div>
         </div>
         <Button className="flex flex-row justify-center items-center gap-2">
