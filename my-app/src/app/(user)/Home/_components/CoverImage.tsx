@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CameraIcon, Loader } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "./userValues";
 import { api } from "@/app/axios";
 import { toast } from "sonner";
@@ -11,9 +11,7 @@ import { uploadImage } from "../../CreateProfile/_components/uploadImageFunction
 export const Cover = () => {
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
-  const [coverImage, setCoverImage] = useState(
-    user ? user?.profile.backgroundImage : ""
-  );
+  const [coverImage, setCoverImage] = useState("");
   const [uploadImageFile, setUploadImageFile] = useState<File>();
   const addCoverImage = async (backgroundImage: string) => {
     try {
@@ -34,9 +32,14 @@ export const Cover = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (user?.profile?.backgroundImage) {
+      setCoverImage(user.profile.backgroundImage);
+    }
+  }, [user]);
 
   return (
-    <div className="relative w-full h-[40%] bg-[#d2d2d8] justify-center items-center ">
+    <div className="relative w-full h-[50%] bg-[#d2d2d8] justify-center items-center ">
       {uploadImageFile ? (
         <div className=" absolute z-20 w-full flex justify-end  p-4">
           <div className="flex flex-row gap-4 ">
@@ -50,7 +53,9 @@ export const Cover = () => {
             </Button>
             <Button
               onClick={() => {
-                setCoverImage(coverImage);
+                setCoverImage(
+                  user ? user?.profile.backgroundImage : coverImage
+                );
                 setUploadImageFile(undefined);
               }}
               className="w-30"

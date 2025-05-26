@@ -55,7 +55,6 @@ export type UserContextType = {
     socialMediaURL: string,
     userId: number
   ) => Promise<void>;
-  // UpdateProfile: (userId: number) => Promise<void>;
   loading: boolean;
 } & PropsWithChildren;
 
@@ -78,7 +77,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
 
       localStorage.setItem("token", data.token);
       setUser(data.user);
-
+      await getUser();
       router.push("/Home");
     } catch {
       toast.error("Нэвтрэх үйлдэл амжилтгүй");
@@ -141,7 +140,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const signOut = async () => {
     localStorage.removeItem("token");
     setUser(undefined);
-    router.push("./");
+    router.push("./Home");
   };
 
   const getUser = async () => {

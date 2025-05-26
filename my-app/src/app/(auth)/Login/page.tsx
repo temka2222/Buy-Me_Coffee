@@ -1,4 +1,5 @@
 "use client";
+import { useUser } from "@/app/(user)/Home/_components/userValues";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -26,8 +28,8 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { signIn } = useUser();
+  const router = useRouter();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -37,9 +39,8 @@ export default function Home() {
     },
   });
   const { handleSubmit, control, formState } = form;
-  const onSubmit = (data: FormData) => {
-    setEmail(data.email);
-    setPassword(data.password);
+  const onSubmit = async (data: FormData) => {
+    await signIn(data.email, data.password);
   };
 
   return (
@@ -99,7 +100,14 @@ export default function Home() {
             </Button>
           </form>
         </Form>
-        <Button className="absolute top-5 right-5 ">Sign out</Button>
+        <Button
+          onClick={() => {
+            router.push("./sign-up");
+          }}
+          className="absolute top-5 right-5 "
+        >
+          Sign out
+        </Button>
       </div>
     </div>
   );

@@ -1,9 +1,88 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { useUser } from "./userValues";
+import { Badge } from "@/components/ui/badge";
+import { CoffeeIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export const CreateDonation = () => {
+  const { user } = useUser();
+  const [amount, setAmount] = useState(0);
+  const [socialURL, setSocialURL] = useState("");
   return (
     <Card className="flex-1 ">
-      <CardContent>donation</CardContent>
+      <CardContent className="flex flex-col gap-6 ">
+        <p className=" font-bold text-2xl">
+          Buy {user?.profile?.name} a Coffee
+        </p>
+        <div className="flex flex-col gap-2">
+          <p className="font-medium text-xl">Select amount:</p>
+          <div className="flex flex-row gap-12 ">
+            <Badge
+              onClick={() => setAmount(1)}
+              variant="secondary"
+              className={`flex flex-row gap-2 p-3 ${
+                amount == 1 ? "border-black" : ""
+              }`}
+            >
+              <CoffeeIcon />
+              $1
+            </Badge>
+            <Badge
+              onClick={() => setAmount(2)}
+              variant="secondary"
+              className={`flex flex-row gap-2 p-3 ${
+                amount == 2 ? "border-black" : ""
+              }`}
+            >
+              <CoffeeIcon />
+              $2
+            </Badge>
+            <Badge
+              onClick={() => setAmount(5)}
+              variant="secondary"
+              className={`flex flex-row gap-2 p-3 ${
+                amount == 5 ? "border-black" : ""
+              }`}
+            >
+              <CoffeeIcon />
+              $5
+            </Badge>
+            <Badge
+              onClick={() => setAmount(10)}
+              variant="secondary"
+              className={`flex flex-row gap-2 p-3 ${
+                amount == 10 ? "border-black" : ""
+              }`}
+            >
+              <CoffeeIcon />
+              $10
+            </Badge>
+          </div>
+        </div>
+
+        <div className="w-full flex flex-col gap-2">
+          <p className="font-medium">Enter BuyMeCoffee or social acount URL:</p>
+          <Input
+            onChange={(e) => {
+              setSocialURL(e.target.value);
+            }}
+            placeholder="buymeacoffee.com/"
+          ></Input>
+        </div>
+        <div className="w-full h-full  flex flex-col gap-2">
+          <p className="font-medium">Special message:</p>
+          <Textarea
+            placeholder="Please write your message here"
+            className="w-full  h-[150px] "
+          ></Textarea>
+        </div>
+        <Button disabled={!amount || !socialURL} className="text-white">
+          Support
+        </Button>
+      </CardContent>
     </Card>
   );
 };

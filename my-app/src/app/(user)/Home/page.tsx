@@ -10,7 +10,7 @@ export default function Home() {
   const { user } = useUser();
   console.log(user);
   return (
-    <div className="flex  flex-row px-16 pt-16 gap-4">
+    <div className="flex  flex-row  pl-[15%] pr-16 pt-16 gap-4">
       <Menu selectedMenu={selectedMenu} setSelectedmenu={setSelectedmenu} />
 
       <div className="w-full h-200  ">

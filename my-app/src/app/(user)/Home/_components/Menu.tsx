@@ -10,7 +10,7 @@ export const Menu = ({
   selectedMenu,
 }: SelectedMenuPropType) => {
   return (
-    <div className=" w-[15%] flex flex-col gap-1 font-small ">
+    <div className="fixed top-16 left-16 w-[10%] flex flex-col gap-1 font-small ">
       <div
         onClick={() => {
           setSelectedmenu("home");

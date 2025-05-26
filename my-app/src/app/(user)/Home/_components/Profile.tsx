@@ -12,7 +12,7 @@ export const Profile = () => {
         <CardContent className="w-full flex flex-col gap-3">
           <div className="w-full flex flex-row justify-between items-center border-b border-solid py-8 ">
             <div className="flex flex-row gap-2 justify-center items-center">
-              {user ? (
+              {user?.profile?.avatarImage ? (
                 <Image
                   width={28}
                   height={28}
@@ -23,11 +23,19 @@ export const Profile = () => {
               ) : (
                 <UserIcon />
               )}
-              <p className="font-bold">{user?.profile.name}</p>
+              {user?.profile?.avatarImage ? (
+                <p className="font-bold">{user?.profile.name}</p>
+              ) : (
+                ""
+              )}
             </div>
             <Button variant="outline">Edit page</Button>
           </div>
-          <p className="font-bold">About {user?.profile.name}</p>
+          {user?.profile?.name ? (
+            <p className="font-bold">about {user?.profile.name}</p>
+          ) : (
+            ""
+          )}
           <p>
             I’m a typical person who enjoys exploring different things. I also
             make music art as a hobby. Follow me along.
