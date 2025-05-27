@@ -8,6 +8,10 @@ export const getDonation: RequestHandler = async (req, res) => {
       where: {
         recipientId: userId,
       },
+      include: {
+        donor: true,
+        recepient: true,
+      },
     });
     res.status(200).json({ donation });
   } catch (error) {

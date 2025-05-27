@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
-type Profile = {
+export type Profile = {
   id: number;
   name: string;
   about: string;
@@ -30,6 +30,15 @@ type Bankcard = {
   expiryDate: string;
   userId: number;
 };
+export type Donation = {
+  id: number;
+  amount: number;
+  specialMessage: String;
+  socialURLOrBuyMeACoffee: String;
+  donorId: number;
+  recipientId: number;
+  createdAt: Date;
+};
 export type UserType = {
   id: number;
   email: string;
@@ -39,6 +48,7 @@ export type UserType = {
   bankCard: Bankcard;
   createdAt: string;
   updatedAt: string;
+  receivedDonations: Donation[];
 };
 export type UserContextType = {
   user?: UserType;

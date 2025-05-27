@@ -53,7 +53,7 @@ export const Header = () => {
         ) : (
           <Badge
             onClick={() => {
-              router.push("./Login");
+              router.push("/Login");
             }}
             className="px-5 py-2"
             variant="secondary"

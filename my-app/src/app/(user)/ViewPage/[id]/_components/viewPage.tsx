@@ -1,15 +1,14 @@
 "use client";
-
 import { Cover } from "./CoverImage";
 import { CreateDonation } from "./CreateDonation";
-import { Profile } from "./Profile";
+import { ProfileScreen } from "./Profile";
 
 export const ViewPage = () => {
   return (
     <div className=" relative w-full h-screen flex flex-col">
       <Cover />
       <div className=" absolute w-full flex flex-row gap-16 px-16 top-[40%] ">
-        <Profile />
+        <ProfileScreen />
         <CreateDonation />
       </div>
     </div>

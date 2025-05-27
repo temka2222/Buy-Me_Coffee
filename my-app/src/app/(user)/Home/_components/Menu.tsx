@@ -1,5 +1,7 @@
 "use client";
 import { ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { useUser } from "./userValues";
 
 type SelectedMenuPropType = {
   selectedMenu: string;
@@ -9,6 +11,7 @@ export const Menu = ({
   setSelectedmenu,
   selectedMenu,
 }: SelectedMenuPropType) => {
+  const { user } = useUser();
   return (
     <div className="fixed top-16 left-16 w-[10%] flex flex-col gap-1 font-small ">
       <div
@@ -31,16 +34,18 @@ export const Menu = ({
       >
         Explore
       </div>
-      <div
-        onClick={() => {
-          setSelectedmenu("view page");
-        }}
-        className={`flex flex-row gap-1 ${
-          selectedMenu == "view page" ? "bg-gray-200" : ""
-        } items-center pl-4 py-2 rounded-xl `}
-      >
-        View page <ExternalLink size={16} />
-      </div>
+      <Link href={`http://localhost:3000/ViewPage/${user?.id}`} key={user?.id}>
+        <div
+          onClick={() => {
+            setSelectedmenu("view page");
+          }}
+          className={`flex flex-row gap-1 ${
+            selectedMenu == "view page" ? "bg-gray-200" : ""
+          } items-center pl-4 py-2 rounded-xl `}
+        >
+          View page <ExternalLink size={16} />
+        </div>
+      </Link>
       <div
         onClick={() => {
           setSelectedmenu("account settings");

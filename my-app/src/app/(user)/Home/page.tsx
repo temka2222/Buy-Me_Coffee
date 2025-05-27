@@ -4,7 +4,7 @@ import { Menu } from "./_components/Menu";
 import { User } from "./_components/User";
 import { ProfileDashboard } from "./_components/ProfileDashboard";
 import { useUser } from "./_components/userValues";
-import { ViewPage } from "./_components/viewPage";
+import { ViewPage } from "../ViewPage/[id]/_components/viewPage";
 export default function Home() {
   const [selectedMenu, setSelectedmenu] = useState("home");
   const { user } = useUser();

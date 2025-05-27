@@ -6,15 +6,19 @@ datasource db {
     url="prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNDM4NTFlNWMtOTc5Mi00ZDk2LTlhYWMtMzQ5NGFlZTNmYjRmIiwidGVuYW50X2lkIjoiZTc0ZjEzYWEyNDQwOTI3NmFhNGZlM2QyOTU1NGUwOWY2MDVjNjdhMzkyNWUwYWRkMDYwMGZlYmZmOWJjOThiNSIsImludGVybmFsX3NlY3JldCI6ImQzZmQ4NmM5LTdlYjktNGViYi04NzlhLTYyZDQzZDI1NzE1NiJ9.__oWEGHGZPzdCaWs6jcu-s5xQRxE8ODnxcHzOqWKATs"
 }
 model User {
-    id  Int @id @default(autoincrement())
-    email String @unique 
+  id       Int    @id @default(autoincrement())
+  email    String @unique 
   password String
   username String
- profile Profile?
- bankCard Bankcard?
- donations Donation[]
-   createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+
+  profile  Profile?
+  bankCard Bankcard?
+
+  donationsMade     Donation[] @relation("DonorRelation")     
+  donationsReceived Donation[] @relation("RecipientRelation")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 model Profile {
     id Int @id @default(autoincrement())
@@ -43,14 +47,18 @@ createdAt DateTime
 updatedAt DateTime
 }
 
-model Donation{
-    id Int @id @default(autoincrement())
-    amount Int
-    specialMessage String
-    socialURLOrBuyMeACoffee String
-    donorId Int 
-    recipientId Int 
-    recepient User @relation(fields: [recipientId],references: [id])
-    createdAt DateTime
-    updatedAt DateTime
-} 
+model Donation {
+  id Int @id @default(autoincrement())
+  amount Int
+  specialMessage String
+  socialURLOrBuyMeACoffee String
+
+  donorId Int
+  donor   User @relation("DonorRelation", fields: [donorId], references: [id])
+
+  recipientId Int
+  recepient User @relation("RecipientRelation", fields: [recipientId], references: [id])
+
+  createdAt DateTime
+  updatedAt DateTime
+}

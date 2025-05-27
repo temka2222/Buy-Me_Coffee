@@ -1,22 +1,33 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { useUser } from "./userValues";
 import { Badge } from "@/components/ui/badge";
 import { CoffeeIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Profile, useUser } from "@/app/(user)/Home/_components/userValues";
+import { useParams } from "next/navigation";
+import { Params } from "next/dist/server/request/params";
+import { getProfile } from "./getProfileFunction";
 
 export const CreateDonation = () => {
-  const { user } = useUser();
   const [amount, setAmount] = useState(0);
   const [socialURL, setSocialURL] = useState("");
+  const { id } = useParams<Params>();
+  const [profile, setProfile] = useState<Profile | null>(null);
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (!id) return;
+      const data = await getProfile(parseInt(id as string));
+      setProfile(data?.profile);
+    };
+
+    loadProfile();
+  }, [id]);
   return (
     <Card className="flex-1 ">
       <CardContent className="flex flex-col gap-6 ">
-        <p className=" font-bold text-2xl">
-          Buy {user?.profile?.name} a Coffee
-        </p>
+        <p className=" font-bold text-2xl">Buy {profile?.name} a Coffee</p>
         <div className="flex flex-col gap-2">
           <p className="font-medium text-xl">Select amount:</p>
           <div className="flex flex-row gap-12 ">
