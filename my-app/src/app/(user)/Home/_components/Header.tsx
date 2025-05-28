@@ -8,7 +8,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useUser } from "./userValues";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 
 export const Header = () => {
@@ -16,25 +15,29 @@ export const Header = () => {
   const router = useRouter();
 
   return (
-    <div className="w-full fixed flex flex-row justify-between px-16 pt-4 z-50 bg-white">
+    <div className="w-full fixed flex flex-row justify-between pl-16 pr-26 py-3 z-50 bg-white">
       <div className="flex flex-row items-center justify-center gap-2">
         <CoffeeIcon size={18} />
         <p className="font-bold">Buy Me Coffee</p>
       </div>
 
       <div className="flex flex-row gap-3 items-center">
-        {user?.profile ? (
+        {user ? (
           <>
             <div className="flex flex-row gap-2 items-center">
-              <Image
-                width={28}
-                height={28}
-                alt="image"
-                src={user.profile?.avatarImage}
-                className="rounded-full"
-              />
+              {user.profile?.avatarImage && (
+                <Image
+                  width={28}
+                  height={28}
+                  alt="image"
+                  src={user.profile?.avatarImage}
+                  className="rounded-full"
+                />
+              )}
 
-              <p className="font-bold">{user?.profile?.name ?? "Anonymous"}</p>
+              {user.profile?.name && (
+                <p className="font-bold">{user.profile.name}</p>
+              )}
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -51,15 +54,26 @@ export const Header = () => {
             </DropdownMenu>
           </>
         ) : (
-          <Badge
-            onClick={() => {
-              router.push("/Login");
-            }}
-            className="px-5 py-2"
-            variant="secondary"
-          >
-            Login
-          </Badge>
+          <div className="flex flex-row gap-3 ">
+            <Button
+              variant="secondary"
+              onClick={() => {
+                router.push("/Login");
+              }}
+              className="px-5 py-2"
+            >
+              Login
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                router.push("/Login");
+              }}
+              className="px-5 py-2"
+            >
+              Sign up
+            </Button>
+          </div>
         )}
       </div>
     </div>

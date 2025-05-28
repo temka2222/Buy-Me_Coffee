@@ -5,7 +5,6 @@ import { toast } from "sonner";
 export const getProfile = async (id: number) => {
   try {
     const response = await api.get(`/profile?userId=${id}`);
-    console.log(response);
     return response.data;
   } catch (error) {
     {

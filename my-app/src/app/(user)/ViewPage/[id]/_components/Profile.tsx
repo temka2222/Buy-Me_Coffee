@@ -5,18 +5,20 @@ import {
 } from "@/app/(user)/Home/_components/userValues";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, User2, UserIcon } from "lucide-react";
+import { ChevronDown, Heart, User2, UserIcon } from "lucide-react";
 import { Params } from "next/dist/server/request/params";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getProfile } from "./getProfileFunction";
 import { getDonations } from "./getDonationsFunction";
+import { Support } from "./Supporter";
 
 export const ProfileScreen = () => {
   const { id } = useParams<Params>();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [donation, setDonation] = useState<Donation[]>();
+  const [seeMoreButton, setSeeMoreButton] = useState(false);
   useEffect(() => {
     const loadProfile = async () => {
       if (!id) return;
@@ -88,7 +90,38 @@ export const ProfileScreen = () => {
               </CardContent>
             </Card>
           ) : (
-            donation.map((item) => <p key={item.id}>Donation ID: {item.id}</p>)
+            <>
+              {!seeMoreButton
+                ? donation
+                    .slice(0, 3)
+                    .map((item) => (
+                      <Support
+                        key={item.id}
+                        name={item.donor.name}
+                        amount={item.amount}
+                        specialMessage={item.specialMessage}
+                        profileImg={item.donor.avatarImage}
+                      />
+                    ))
+                : donation.map((item) => (
+                    <Support
+                      key={item.id}
+                      name={item.donor.name}
+                      amount={item.amount}
+                      specialMessage={item.specialMessage}
+                      profileImg={item.donor.avatarImage}
+                    />
+                  ))}
+              {donation.length > 3 && (
+                <Button
+                  variant="outline"
+                  onClick={() => setSeeMoreButton(!seeMoreButton)}
+                >
+                  {seeMoreButton ? "See less" : "See more"}
+                  <ChevronDown />
+                </Button>
+              )}
+            </>
           )}
         </CardContent>
       </Card>

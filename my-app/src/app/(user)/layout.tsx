@@ -7,7 +7,7 @@ export default function CustomerLayout({ children }: PropsWithChildren) {
     <div className="antialiased w-full flex flex-col  ">
       <Header />
       <Toaster position="top-right" />
-      <div className="flex-1 h-screen ">{children}</div>
+      <div className="flex-1 h-screen px-10 ">{children}</div>
     </div>
   );
 }

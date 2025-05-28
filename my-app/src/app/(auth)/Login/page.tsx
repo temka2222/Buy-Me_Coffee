@@ -106,7 +106,7 @@ export default function Home() {
           }}
           className="absolute top-5 right-5 "
         >
-          Sign out
+          Sign up
         </Button>
       </div>
     </div>

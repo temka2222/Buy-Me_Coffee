@@ -14,7 +14,7 @@ model User {
   profile  Profile?
   bankCard Bankcard?
 
-  donationsMade     Donation[] @relation("DonorRelation")     
+      
   donationsReceived Donation[] @relation("RecipientRelation")
 
   createdAt DateTime @default(now())
@@ -30,6 +30,7 @@ model Profile {
     successMessage String
     userId  Int @unique
     user User @relation(fields: [userId],references: [id])
+    donationsMade     Donation[] @relation("DonorRelation") 
     createdAt DateTime
     updatedAt DateTime
 
@@ -50,11 +51,11 @@ updatedAt DateTime
 model Donation {
   id Int @id @default(autoincrement())
   amount Int
-  specialMessage String
+  specialMessage String?
   socialURLOrBuyMeACoffee String
 
-  donorId Int
-  donor   User @relation("DonorRelation", fields: [donorId], references: [id])
+  donorId Int @default(1)
+  donor   Profile @relation("DonorRelation", fields: [donorId], references: [id])
 
   recipientId Int
   recepient User @relation("RecipientRelation", fields: [recipientId], references: [id])

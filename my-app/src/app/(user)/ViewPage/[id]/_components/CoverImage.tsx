@@ -53,7 +53,7 @@ export const Cover = () => {
     if (user?.profile?.backgroundImage) {
       setCoverImage(user.profile.backgroundImage);
     }
-  }, [user]);
+  }, [user, coverImage]);
 
   return (
     <div className="relative w-full h-[50%] bg-[#d2d2d8] justify-center items-center ">
@@ -99,7 +99,15 @@ export const Cover = () => {
         </div>
       )}
       {user && (
-        <div className="absolute  w-50 h-10 flex flex-col bottom-1/2 left-1/2 transform -translate-x-1/2 items-center justify-center bg-black text-white rounded-xl  ">
+        <div
+          className={`absolute w-50 h-10 ${
+            uploadImageFile ? "hidden" : "flex"
+          } items-center justify-center bg-black text-white rounded-xl ${
+            !profile?.backgroundImage
+              ? "bottom-1/2 left-1/2 transform -translate-x-1/2"
+              : "top-3 right-3"
+          }`}
+        >
           <label htmlFor="cover" className="flex flex-row gap-2 z-10">
             <CameraIcon /> {coverImage ? "Edit" : "Add"} cover image
             <input

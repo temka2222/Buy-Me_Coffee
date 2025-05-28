@@ -33,9 +33,10 @@ type Bankcard = {
 export type Donation = {
   id: number;
   amount: number;
-  specialMessage: String;
-  socialURLOrBuyMeACoffee: String;
+  specialMessage: string;
+  socialURLOrBuyMeACoffee: string;
   donorId: number;
+  donor: Profile;
   recipientId: number;
   createdAt: Date;
 };

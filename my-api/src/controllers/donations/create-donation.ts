@@ -2,18 +2,25 @@ import { RequestHandler } from "express";
 import { prisma } from "../../db";
 export const CreateDonation: RequestHandler = async (req, res) => {
   const userId = parseInt(req.params.userId);
-  const { amount, specialMessage, donorID, socialURLOrBuyMeACoffee } = req.body;
+  const {
+    amount,
+    specialMessage,
+    donorId,
+    socialURLOrBuyMeACoffee,
+    createdAt,
+    updatedAt,
+  } = req.body;
 
   try {
     const donation = await prisma.donation.create({
       data: {
         amount,
-        specialMessage,
         recipientId: userId,
-        donorId: donorID ? parseInt(donorID) : 21,
+        donorId: donorId ? Number(donorId) : 1,
         socialURLOrBuyMeACoffee,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        ...(specialMessage && { specialMessage }),
+        createdAt,
+        updatedAt,
       },
     });
 
