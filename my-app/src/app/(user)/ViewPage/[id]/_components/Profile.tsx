@@ -13,11 +13,14 @@ import { useEffect, useState } from "react";
 import { getProfile } from "./getProfileFunction";
 import { getDonations } from "./getDonationsFunction";
 import { Support } from "./Supporter";
+type ProfileScreenPropsType = {
+  donation: Donation[] | null;
+};
 
-export const ProfileScreen = () => {
+export const ProfileScreen = ({ donation }: ProfileScreenPropsType) => {
   const { id } = useParams<Params>();
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [donation, setDonation] = useState<Donation[]>();
+
   const [seeMoreButton, setSeeMoreButton] = useState(false);
   useEffect(() => {
     const loadProfile = async () => {
@@ -25,15 +28,8 @@ export const ProfileScreen = () => {
       const data = await getProfile(parseInt(id as string));
       setProfile(data?.profile);
     };
-    const loadDonation = async () => {
-      if (!id) return;
-      const data = await getDonations(parseInt(id as string));
-      setDonation(data);
-      console.log("data", data);
-    };
 
     loadProfile();
-    loadDonation();
   }, [id]);
   return (
     <div className=" flex-1  flex flex-col gap-4">

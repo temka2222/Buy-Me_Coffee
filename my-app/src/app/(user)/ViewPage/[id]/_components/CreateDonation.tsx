@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CoffeeIcon } from "lucide-react";
+import { CoffeeIcon, Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,16 @@ import { Profile, useUser } from "@/app/(user)/Home/_components/userValues";
 import { useParams } from "next/navigation";
 import { Params } from "next/dist/server/request/params";
 import { getProfile } from "./getProfileFunction";
-
-export const CreateDonation = () => {
+import { CreateDonationFun } from "./createDonationFunction";
+type CreateDonationPropsType = {
+  loadDonation: () => Promise<void>;
+};
+export const CreateDonation = ({ loadDonation }: CreateDonationPropsType) => {
   const [amount, setAmount] = useState(0);
   const [socialURL, setSocialURL] = useState("");
+  const [specialMessage, setSpecialMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { user } = useUser();
   const { id } = useParams<Params>();
   const [profile, setProfile] = useState<Profile | null>(null);
   useEffect(() => {
@@ -86,12 +92,28 @@ export const CreateDonation = () => {
         <div className="w-full h-full  flex flex-col gap-2">
           <p className="font-medium">Special message:</p>
           <Textarea
+            value={specialMessage}
+            onChange={(e) => setSpecialMessage(e.target.value)}
             placeholder="Please write your message here"
             className="w-full  h-[150px] "
           ></Textarea>
         </div>
-        <Button disabled={!amount || !socialURL} className="text-white">
-          Support
+        <Button
+          onClick={async () => {
+            await CreateDonationFun(
+              Number(id),
+              amount,
+              specialMessage,
+              user ? user.id : 1,
+              socialURL,
+              setLoading
+            );
+            await loadDonation();
+          }}
+          disabled={!amount || !socialURL}
+          className="text-white"
+        >
+          {loading ? <Loader className="animate-spin" /> : "Support"}
         </Button>
       </CardContent>
     </Card>

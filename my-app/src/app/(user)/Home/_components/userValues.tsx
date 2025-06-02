@@ -56,6 +56,7 @@ export type UserContextType = {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, username: string) => Promise<void>;
   signOut: () => Promise<void>;
+  getUser: () => Promise<void>;
   step: number;
   setStep: (value: number) => void;
   setLoading: (value: boolean) => void;
@@ -188,6 +189,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         setStep,
         setLoading,
         createProfile,
+        getUser,
       }}
     >
       {loading ? (
