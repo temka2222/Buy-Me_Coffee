@@ -34,7 +34,7 @@ type SignUpStepTwoProps = {
 };
 
 export const SignUpStepTwo = ({ setStep, username }: SignUpStepTwoProps) => {
-  const { signUp, user } = useUser();
+  const { signUp } = useUser();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -43,7 +43,7 @@ export const SignUpStepTwo = ({ setStep, username }: SignUpStepTwoProps) => {
       password: "",
     },
   });
-  const { handleSubmit, control, formState } = form;
+  const { formState } = form;
   const onSubmit = (data: FormData) => {
     setStep(3);
     signUp(data.email, data.password, username);

@@ -1,5 +1,4 @@
 import { api } from "@/app/axios";
-import { toast } from "sonner";
 
 export const getDonations = async (userId: number) => {
   try {

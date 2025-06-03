@@ -1,17 +1,12 @@
-import {
-  Donation,
-  Profile,
-  useUser,
-} from "@/app/(user)/Home/_components/userValues";
+import { Donation, Profile } from "@/app/(user)/Home/_components/userValues";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronDown, Heart, User2, UserIcon } from "lucide-react";
+import { ChevronDown, Heart, UserIcon } from "lucide-react";
 import { Params } from "next/dist/server/request/params";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getProfile } from "./getProfileFunction";
-import { getDonations } from "./getDonationsFunction";
 import { Support } from "./Supporter";
 type ProfileScreenPropsType = {
   donation: Donation[] | null;

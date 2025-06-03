@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,7 +36,7 @@ export default function Home() {
       password: "",
     },
   });
-  const { handleSubmit, control, formState } = form;
+  const { formState } = form;
   const onSubmit = async (data: FormData) => {
     await signIn(data.email, data.password);
   };

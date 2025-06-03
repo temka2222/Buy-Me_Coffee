@@ -1,10 +1,8 @@
-import { useUser } from "@/app/(user)/Home/_components/userValues";
 import { api } from "@/app/axios";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -51,8 +49,6 @@ export const SignUpStepOne = ({ setStep, setUsername }: SignUpStepOneProps) => {
       username: "",
     },
   });
-
-  const { handleSubmit, control, formState } = form;
 
   return (
     <div className=" w-[40%] flex flex-col gap-5">

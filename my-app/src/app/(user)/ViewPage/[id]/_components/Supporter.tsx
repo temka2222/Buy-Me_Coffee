@@ -1,6 +1,3 @@
-import { formatDistanceToNow } from "date-fns";
-import { validateHeaderName } from "http";
-import { UserIcon } from "lucide-react";
 import Image from "next/image";
 
 type SupportProps = {

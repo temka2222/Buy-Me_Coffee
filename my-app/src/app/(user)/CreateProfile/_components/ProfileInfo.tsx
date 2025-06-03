@@ -14,9 +14,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUser } from "../../Home/_components/userValues";
-import { api } from "@/app/axios";
-import axios from "axios";
-import { toast } from "sonner";
+
 import { uploadImage } from "./uploadImageFunction";
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
@@ -57,7 +55,7 @@ export const ProfileInfo = ({ setStep }: StepPropsType) => {
       url: "",
     },
   });
-  const { handleSubmit, control, formState } = form;
+  const { formState } = form;
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     if (!user) return;

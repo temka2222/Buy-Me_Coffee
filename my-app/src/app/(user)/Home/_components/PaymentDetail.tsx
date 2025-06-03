@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -10,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -24,7 +23,6 @@ import {
 
 import { useUser } from "../../Home/_components/userValues";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import {
   cardNumberValue,
   formatCardNumber,
@@ -32,10 +30,9 @@ import {
   useSelectCountry,
   years,
 } from "../../CreateProfile/_components/SelectData";
-import { AddBankCardFunction } from "../CreateDonationFunction";
 import { Card, CardContent } from "@/components/ui/card";
-import { Rethink_Sans } from "next/font/google";
-import { getDate, getMonth } from "date-fns";
+import { updateBankCardFunction } from "./updateBanckcardFunction";
+import { getMonth } from "date-fns";
 
 const schema = z.object({
   country: z.string().min(1, { message: "Select country to continue" }),
@@ -57,11 +54,8 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 export const PaymentDetail = () => {
-  const router = useRouter();
   const { countries } = useSelectCountry();
-  const { loading, setLoading, user } = useUser();
-  const [expiryYear, setExpiryYear] = useState(0);
-  const [expiryMonth, setExpiryMonth] = useState(0);
+  const { setLoading, user } = useUser();
   const defaultValues = useMemo(() => {
     let expiryMonth = "";
     let expiryYear = "";
@@ -89,13 +83,6 @@ export const PaymentDetail = () => {
     mode: "onChange",
     defaultValues,
   });
-  useEffect(() => {
-    if (!user?.bankCard.expiryDate) return;
-    const expiryDate = new Date(user.bankCard.expiryDate);
-    setExpiryMonth(getMonth(expiryDate));
-    setExpiryYear(getDate(expiryDate));
-  });
-  const { handleSubmit, control, formState } = form;
   const onSubmit = async (data: FormData) => {
     const cardValue = cardNumberValue(data.cardNumber);
     const lastDay = new Date(
@@ -112,16 +99,15 @@ export const PaymentDetail = () => {
       toast.error("User not found!");
       return;
     } else
-      await AddBankCardFunction(
+      await updateBankCardFunction(
         data.country,
         data.firstName,
         data.lastName,
         cardValue,
         expiryDate,
-        user.id,
+        user.bankCard.id,
         setLoading
       );
-    router.push("./Home");
   };
 
   return (

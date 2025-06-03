@@ -2,18 +2,18 @@ import { api } from "@/app/axios";
 
 import { toast } from "sonner";
 
-export const AddBankCardFunction = async (
+export const updateBankCardFunction = async (
   country: string,
   firstname: string,
   lastName: string,
   cardNumber: string,
   expiryDate: Date,
-  userId: number,
+  BankCardId: number,
   setLoading: (loading: boolean) => void
 ) => {
   try {
     setLoading(true);
-    await api.post(`/bankcard/${userId}`, {
+    await api.put(`/bankcard/update/${BankCardId}`, {
       country,
       firstname,
       lastName,

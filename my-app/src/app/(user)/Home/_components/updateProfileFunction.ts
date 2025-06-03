@@ -19,6 +19,7 @@ export const updateProfile = async (
     });
     toast.success("success!");
   } catch (error) {
+    console.error(error);
     {
       toast.error("error!");
     }

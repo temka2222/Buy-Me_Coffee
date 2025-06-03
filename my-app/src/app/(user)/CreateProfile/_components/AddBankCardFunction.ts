@@ -22,6 +22,7 @@ export const AddBankCardFunction = async (
     });
     toast.success("success!");
   } catch (error) {
+    console.error(error);
     {
       toast.error("error!");
     }

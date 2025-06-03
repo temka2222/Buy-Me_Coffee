@@ -5,8 +5,8 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
-import { formatDistanceToNow, isAfter, subDays } from "date-fns";
-import { ChevronDown, Heart, User } from "lucide-react";
+import { isAfter, subDays } from "date-fns";
+import { ChevronDown, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Donation, useUser } from "./userValues";
 import { getDonations } from "../../ViewPage/[id]/_components/getDonationsFunction";

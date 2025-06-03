@@ -8,19 +8,29 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Copy, User2, User2Icon } from "lucide-react";
-import { useUser } from "./userValues";
+import { Copy, User2Icon } from "lucide-react";
+import { UserType, useUser } from "./userValues";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 type UserProps = {
   setRange: (value: string) => void;
 };
 export const User = ({ setRange }: UserProps) => {
-  const { user } = useUser();
+  const { user, loading } = useUser();
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
-  const shareUrl = `http://localhost:3000/ViewPage/${user?.id}`;
+  const [profile, setProfile] = useState<UserType>();
+  useEffect(() => {
+    if (!user) {
+      return;
+    } else if (!loading && user) {
+      setProfile(user);
+    }
+  }, [loading, user, router]);
+  const shareUrl = `http://localhost:3000/ViewPage/${profile?.id}`;
 
   const handleCopy = async () => {
     try {
@@ -29,6 +39,7 @@ export const User = ({ setRange }: UserProps) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
+      console.error(error);
       toast.error("Хуулахад алдаа гарлаа");
     }
   };
@@ -38,21 +49,21 @@ export const User = ({ setRange }: UserProps) => {
       <CardContent className="w-full flex flex-col gap-6 p-6">
         <div className="flex flex-row justify-between border-b border-solid pb-8">
           <div className="flex flex-row gap-4 items-center">
-            {user?.profile?.avatarImage ? (
+            {profile?.profile?.avatarImage ? (
               <Image
                 width={36}
                 height={36}
                 alt="User Avatar"
                 className="rounded-full"
-                src={user.profile.avatarImage}
+                src={profile.profile.avatarImage}
               />
             ) : (
               <User2Icon />
             )}
             <div className="flex flex-col">
-              <p className="font-bold">{user?.profile?.name}</p>
+              <p className="font-bold">{profile?.profile?.name}</p>
               <p className="text-sm text-muted-foreground">
-                buymeacoffee.com/{user?.username}
+                buymeacoffee.com/{profile?.username}
               </p>
             </div>
           </div>

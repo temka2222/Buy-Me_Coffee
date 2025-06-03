@@ -1,7 +1,6 @@
 import { api } from "@/app/axios";
 
 import { toast } from "sonner";
-import { useUser } from "../../../Home/_components/userValues";
 
 export const CreateDonationFun = async (
   userId: number,
@@ -22,6 +21,7 @@ export const CreateDonationFun = async (
     });
     toast.success("success!");
   } catch (error) {
+    console.error(error);
     {
       toast.error("error!");
     }

@@ -11,18 +11,12 @@ import { ProfileScreen } from "./_components/Profile";
 export default function Home() {
   const { id } = useParams<Params>();
   const [donation, setDonation] = useState<Donation[] | null>(null);
-  const [loading, setLoading] = useState(false);
   const loadDonation = async () => {
     if (!id) return;
     try {
-      setLoading(true);
-
       const data = await getDonations(parseInt(id as string));
       setDonation(data);
-    } catch {
-    } finally {
-      setLoading(false);
-    }
+    } catch {}
   };
   useEffect(() => {
     loadDonation();

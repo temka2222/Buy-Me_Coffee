@@ -7,6 +7,7 @@ export const getProfile = async (id: number) => {
     const response = await api.get(`/profile?userId=${id}`);
     return response.data;
   } catch (error) {
+    console.error(error);
     {
       toast.error("error!");
     }

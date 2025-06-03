@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="w-full h-screen flex justify-center items-center">
       {step == 1 && <ProfileInfo setStep={setStep} />}
-      {step == 2 && <AddPaymentCardInfo setStep={setStep} />}
+      {step == 2 && <AddPaymentCardInfo />}
     </div>
   );
 }

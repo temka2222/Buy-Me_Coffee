@@ -1,5 +1,6 @@
 "use client";
 import { useUser } from "@/app/(user)/Home/_components/userValues";
+import { api } from "@/app/axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -12,10 +13,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Value } from "@radix-ui/react-select";
-import { useRouter } from "next/navigation";
+import { Loader } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const schema = z
@@ -36,8 +37,8 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 export const SetPassword = () => {
-  const { signIn } = useUser();
-  const router = useRouter();
+  const { user } = useUser();
+  const [loading, setLoading] = useState(false);
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -46,8 +47,23 @@ export const SetPassword = () => {
       confirmPassword: "",
     },
   });
-  const { handleSubmit, control, formState } = form;
-  const onSubmit = async (data: FormData) => {};
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      setLoading(true);
+      await api.put(`/auth/update/${user?.id}`, {
+        password: data.newPassword,
+      });
+      toast.success("success!");
+    } catch (error) {
+      console.error(error);
+      {
+        toast.error("error!");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Card>
@@ -102,7 +118,11 @@ export const SetPassword = () => {
                   className={`flex justify-center items-center text-white border-solid border pr-8 pl-8 rounded-sm p-2 
              `}
                 >
-                  Save changes
+                  {loading ? (
+                    <Loader className="animate-spin" />
+                  ) : (
+                    "Save changes"
+                  )}
                 </Button>
               </form>
             </Form>

@@ -10,10 +10,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { StepPropsType } from "./ProfileInfo";
 import {
   cardNumberValue,
   formatCardNumber,
@@ -52,10 +50,10 @@ const schema = z.object({
 });
 
 type FormData = z.infer<typeof schema>;
-export const AddPaymentCardInfo = ({ setStep }: StepPropsType) => {
+export const AddPaymentCardInfo = () => {
   const router = useRouter();
   const { countries } = useSelectCountry();
-  const { loading, setLoading, user } = useUser();
+  const { setLoading, user } = useUser();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -69,7 +67,7 @@ export const AddPaymentCardInfo = ({ setStep }: StepPropsType) => {
       cvc: "",
     },
   });
-  const { handleSubmit, control, formState } = form;
+  const { formState } = form;
   const onSubmit = async (data: FormData) => {
     const cardValue = cardNumberValue(data.cardNumber);
     const lastDay = new Date(

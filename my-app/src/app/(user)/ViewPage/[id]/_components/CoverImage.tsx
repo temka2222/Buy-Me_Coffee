@@ -30,18 +30,18 @@ export const Cover = () => {
 
     loadProfile();
   }, [id]);
-  const addCoverImage = async (backgroundImage: string) => {
+  const addCoverImage = async () => {
     try {
       setLoading(true);
       const backgroundImageURL = await uploadImage(uploadImageFile);
-      console.log(backgroundImage);
-      const { data } = await api.put(`/profile/${user?.profile.id}`, {
+      await api.put(`/profile/${user?.profile.id}`, {
         backgroundImage: backgroundImageURL,
       });
       setCoverImage(backgroundImageURL);
       setUploadImageFile(undefined);
       toast.success("success!");
     } catch (error) {
+      console.error(error);
       {
         toast.error("error!");
       }
@@ -63,7 +63,7 @@ export const Cover = () => {
             <Button
               className="w-30"
               onClick={() => {
-                if (coverImage) addCoverImage(coverImage);
+                if (coverImage) addCoverImage();
               }}
             >
               {loading ? <Loader className="animate-spin " /> : "Save changes"}

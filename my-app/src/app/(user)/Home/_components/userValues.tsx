@@ -77,7 +77,7 @@ export const UserContext = createContext<UserContextType>(
 export const UserProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<UserType>();
   const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const signIn = async (email: string, password: string) => {
     try {
@@ -116,6 +116,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
 
       toast.success("success!");
     } catch (error) {
+      console.error(error);
       toast.error("error!");
     }
   };
@@ -152,7 +153,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const signOut = async () => {
     localStorage.removeItem("token");
     setUser(undefined);
-    router.push("./Home");
+    router.push("/Login");
   };
 
   const getUser = async () => {

@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, CoffeeIcon, UserIcon } from "lucide-react";
+import { ChevronDown, CoffeeIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -67,7 +67,7 @@ export const Header = () => {
             <Button
               variant="secondary"
               onClick={() => {
-                router.push("/Login");
+                router.push("/");
               }}
               className="px-5 py-2"
             >

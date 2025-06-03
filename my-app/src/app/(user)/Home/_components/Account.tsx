@@ -14,9 +14,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUser } from "../../Home/_components/userValues";
-import { api } from "@/app/axios";
-import axios from "axios";
-import { toast } from "sonner";
 import { uploadImage } from "../../CreateProfile/_components/uploadImageFunction";
 import { updateProfile } from "./updateProfileFunction";
 const ACCEPTED_IMAGE_TYPES = [
@@ -62,7 +59,6 @@ export const Account = () => {
     if (!user?.profile.avatarImage) return;
     setPrevProfileImage(user?.profile.avatarImage);
   }, []);
-  const { handleSubmit, control, formState } = form;
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     if (!user) return;
