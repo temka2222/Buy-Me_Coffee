@@ -1,7 +1,7 @@
 "use client";
 import { api, setAuthToken } from "@/app/axios";
 import axios from "axios";
-import { Loader } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import {
   createContext,
