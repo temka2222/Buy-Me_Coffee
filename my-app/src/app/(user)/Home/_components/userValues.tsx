@@ -193,13 +193,13 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         getUser,
       }}
     >
-      {loading ? (
+      {/* {loading ? (
         <div className="flex flex-col items-center justify-center h-screen gap-4">
           <Loader className="animate-spin w-20 h-20 text-gray-500" />
         </div>
-      ) : (
-        children
-      )}
+      ) : ( */}
+      {children}
+      {/* )} */}
     </UserContext.Provider>
   );
 };
