@@ -15,11 +15,7 @@ export const signIn: RequestHandler = async (req, res) => {
       return;
     }
 
-    const { password: hashedPassword, ...userWithoutPassword } = user;
-
-    const IsPasswordMatch = await bcrypt.compare(password, hashedPassword);
-
-    if (!IsPasswordMatch) {
+    if (!user) {
       res.status(401).json({ message: "Invalid password" });
       return;
     }
@@ -27,7 +23,7 @@ export const signIn: RequestHandler = async (req, res) => {
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET
     );
-    res.status(200).json({ user: userWithoutPassword, token });
+    res.status(200).json({ user: user, token });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }

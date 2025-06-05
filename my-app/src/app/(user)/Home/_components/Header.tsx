@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "./userValues";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Header = () => {
   const { user, signOut } = useUser();
@@ -25,7 +26,7 @@ export const Header = () => {
         {user ? (
           <>
             <div className="flex flex-row gap-2 items-center">
-              {user.profile?.avatarImage && (
+              {user.profile?.avatarImage ? (
                 <Image
                   width={28}
                   height={28}
@@ -33,6 +34,8 @@ export const Header = () => {
                   src={user.profile?.avatarImage}
                   className="rounded-full"
                 />
+              ) : (
+                <Skeleton className="h-28 w-28 rounded-full" />
               )}
 
               {user.profile?.name && (
