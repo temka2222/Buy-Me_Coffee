@@ -85,10 +85,7 @@ export const SetPassword = () => {
                     <FormItem>
                       <FormLabel>New password</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter email here asdasdasd"
-                          {...field}
-                        />
+                        <Input placeholder="Enter email here " {...field} />
                       </FormControl>
 
                       <FormMessage />
