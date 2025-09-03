@@ -78,7 +78,7 @@ export const UserContext = createContext<UserContextType>(
 export const UserProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<UserType>();
   const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const signIn = async (email: string, password: string) => {
     try {
