@@ -1,7 +1,6 @@
 "use client";
 import { api, setAuthToken } from "@/app/axios";
 import axios from "axios";
-import { Loader } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import {
@@ -12,6 +11,7 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
+import LoadingOverlay from "./LoadingOverlay";
 export type Profile = {
   id: number;
   name: string;
@@ -78,7 +78,7 @@ export const UserContext = createContext<UserContextType>(
 export const UserProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<UserType>();
   const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const signIn = async (email: string, password: string) => {
     try {
@@ -151,11 +151,12 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
       setLoading(false);
     }
   };
-  const signOut = async () => {
-    localStorage.removeItem("token");
-    setUser(undefined);
-    router.push("/Login");
-  };
+const signOut = async() => {
+  localStorage.removeItem("token");
+  setUser(undefined);
+  router.push("/Login");
+  toast.success("Амжилттай гарлаа!");
+};
 
   const getUser = async () => {
     setLoading(true);
@@ -171,7 +172,9 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token){ 
+      setLoading(false);
+      return;}
     setAuthToken(token);
     getUser();
   }, []);
@@ -191,13 +194,8 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
         getUser,
       }}
     >
-      {loading ? (
-        <div className="flex flex-col items-center justify-center h-screen gap-4">
-          <Loader className="animate-spin w-20 h-20 text-gray-500" />
-        </div>
-      ) : (
-        children
-      )}
+    {children}
+      {loading && <LoadingOverlay />}
     </UserContext.Provider>
   );
 };

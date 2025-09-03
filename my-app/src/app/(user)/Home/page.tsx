@@ -11,16 +11,22 @@ import { AccountSettings } from "./_components/AccountSettings";
 import { SuccessMessage } from "./_components/SuccessMessage";
 import { useRouter } from "next/navigation";
 export default function Home() {
-  const { user } = useUser();
+  const { user,loading } = useUser();
   const [selectedMenu, setSelectedmenu] = useState("home");
   const router = useRouter();
-
+ const [range, setRange] = useState("0");
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       router.push("/Login");
     }
-  }, [user]);
-  const [range, setRange] = useState("0");
+  }, [user, loading, router]);
+
+  
+
+  if (!user) {
+    return null; 
+  }
+ 
   return (
     <div className="flex  flex-row  pl-[15%] pr-16 pt-16 gap-4">
       <Menu selectedMenu={selectedMenu} setSelectedmenu={setSelectedmenu} />

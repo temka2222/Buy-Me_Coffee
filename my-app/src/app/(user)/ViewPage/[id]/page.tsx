@@ -8,7 +8,6 @@ import { getDonations } from "./_components/getDonationsFunction";
 import { Cover } from "./_components/CoverImage";
 import { CreateDonation } from "./_components/CreateDonation";
 import { ProfileScreen } from "./_components/Profile";
-import { set } from "date-fns";
 export default function Home() {
   const { id } = useParams<Params>();
   const [donation, setDonation] = useState<Donation[] | null>(null);
